@@ -30,7 +30,10 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.protocol.HttpContext;
 
+import android.util.Log;
+
 class AsyncHttpRequest implements Runnable {
+  private static final String TAG = AsyncHttpRequest.class.getSimpleName();
     private final AbstractHttpClient client;
     private final HttpContext context;
     private final HttpUriRequest request;
@@ -87,6 +90,11 @@ class AsyncHttpRequest implements Runnable {
         		if(!Thread.currentThread().isInterrupted()) {
         			throw e;
         		}
+        	} catch (SecurityException e) {
+        	  Log.d(TAG, "No internet permission, " + e.getMessage());
+        	  if(!Thread.currentThread().isInterrupted()) {
+        	    throw e;
+        	  }
         	}
         }
     }
